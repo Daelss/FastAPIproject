@@ -1,6 +1,5 @@
-from sqlalchemy import Column, ForeignKey, String, Integer, Boolean, ForeignKey, Date, Float, Table, MetaData
+from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
-
 from database import Base
 
 
@@ -8,50 +7,51 @@ class Game(Base):
     __tablename__ = 'game'
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    description = Column(String)
-    developer_id = Column(ForeignKey('developers.id'))
-    developer = relationship('Developer')
-    publisher_id = Column(ForeignKey('publishers.id'))
-    publisher = relationship('Publisher')
-    release_date = Column(Date)
-    genre_id = Column(ForeignKey('genres.id'))
-    genre = relationship('Genre')
-    platform_id = Column(ForeignKey('platforms.id'))
-    platforms = relationship('Platform')
+    developer_id = Column(Integer, ForeignKey('developer.id'))
+    developer = relationship('Developer', back_populates="dev")
+    publisher_id = Column(Integer, ForeignKey('publisher.id'))
+    publisher = relationship('Publisher', back_populates="pub")
+    genre_id = Column(Integer, ForeignKey('genre.id'))
+    genre = relationship('Genre', back_populates="gen")
+    platform_id = Column(Integer, ForeignKey('platform.id'))
+    platforms = relationship('Platform', back_populates="plat")
 
-    def __repr__(self):
-        return f'<Game {self.title} >'
+
 
 class Developer(Base):
     __tablename__ = 'developer'
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
 
-    def __repr__(self):
-        return f'<Developer {self.name}>'
+
+
+    dev = relationship("Game", back_populates="developer")
+
+
 
 class Publisher(Base):
     __tablename__ = 'publisher'
     id = Column(Integer, primary_key=True, unique=True, index=True)
     name = Column(String, unique=True, nullable=False)
 
-    def __repr__(self):
-        return f'<Publisher {self.name}>'
+
+
+    pub = relationship("Game", back_populates="publisher")
 
 class Platform(Base):
     __tablename__ = 'platform'
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
 
-    def __repr__(self):
-        return f'<Platform {self.name}>'
 
+
+    plat = relationship("Game", back_populates="platforms")
 class Genre(Base):
     __tablename__ = 'genre'
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
 
-    def __repr__(self):
-        return f'<Genre {self.name}>'
 
+
+    gen = relationship("Game", back_populates="genre")
 

@@ -3,22 +3,21 @@ from pydantic import BaseModel
 
 class GameBase(BaseModel):
     title: str
-    description: str
+
 
 class GameCreate(GameBase):
     pass
 
 class Game(GameBase):
-    developer: str
-    publisher: str
-    release_date: int
-    genre: list[str]
-    rating: int
-    platform: str
+    developer_id: int
+    publisher_id: int
+    genre_id: int
+    platform_id: int
+
 
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class DeveloperBase(BaseModel):
@@ -30,9 +29,10 @@ class DeveloperCreate(DeveloperBase):
 
 class Developer(DeveloperBase):
     name: str
+    dev: list[Game] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class PublisherBase(BaseModel):
@@ -44,9 +44,9 @@ class PublisherCreate(PublisherBase):
 
 class Publisher(DeveloperBase):
     name: str
-
+    pub: list[Game] = []
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class PlatformBase(BaseModel):
     id: int
@@ -57,9 +57,9 @@ class PlatformCreate(PlatformBase):
 
 class Platform(PlatformBase):
     name: str
-
+    plat: list[Game] = []
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class GenreBase(BaseModel):
@@ -71,7 +71,7 @@ class GenreCreate(GenreBase):
 
 class Genre(GenreBase):
     name: str
-
+    gen: list[Game] = []
     class Config:
-        orm_mode = True
+        from_attributes = True
 
